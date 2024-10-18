@@ -24,8 +24,13 @@ function scanFiles(dir) {
   for (const file of files) {
     const filePath = path.join(dir, file);
 
-    // Skip node_modules and .git directories
-    if (filePath.includes('node_modules') || filePath.includes('.git')) {
+    // Skip node_modules, .git directories, and package.json or package-lock.json files
+    if (
+      filePath.includes('node_modules') ||
+      filePath.includes('.git') ||
+      file === 'package.json' ||
+      file === 'package-lock.json'
+    ) {
       continue;
     }
 
