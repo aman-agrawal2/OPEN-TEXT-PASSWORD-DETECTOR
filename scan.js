@@ -6,6 +6,10 @@ const patterns = [
   {
     name: 'Potential Password, Key, or Token',
     regex: /\b(?:(?:[a-z]*_)?(pass|password|passcode|pwd|secret|token|key|auth|access|random)[a-z0-9_]*)(?<!require|import)[\s]*[:=][\s]*["'][^"']{4,}["']/gi,
+  },
+  {
+    name: 'Suspicious String (looks like a secret)',
+    regex: /["'][A-Za-z0-9!@#$%^&*()_+={}\[\]:;'<>,.?/\\|-]{8,}["']/g,
   }
 ];
 
@@ -26,8 +30,9 @@ function scanFiles(dir) {
         patterns.forEach(({ name, regex }) => {
           let match;
           while ((match = regex.exec(line)) !== null) {
-            console.log(`🚨 Potential ${name} found in ${filePath}:${index + 1}:`);
-            console.log(line.replace(match[0], `[31m${match[0]}[0m`)); // Highlight the matched secret
+            const message = `Potential ${name} found: ${line.trim()}`;
+            const annotation = `::warning file=${filePath},line=${index + 1},col=${match.index + 1}::${message}`;
+            console.log(annotation);
           }
         });
       });
