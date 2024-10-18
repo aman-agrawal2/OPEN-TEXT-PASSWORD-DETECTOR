@@ -5,7 +5,15 @@ const path = require('path');
 const patterns = [
   {
     name: 'Potential Password, Key, or Token',
-    regex: /\b(?:(?:[a-z]*_)?(pass|password|passcode|pwd|secret|token|key|auth|access|random)[a-z0-9_]*)(?<!require|import)[\s]*[:=][\s]*["'][^"']{4,}["']/gi,
+    regex: /\b(?:(?:[a-z]*_)?(pass|password|passcode|pwd|secret|token|key|auth|access|random|api|encryption|db)[a-z0-9_]*)(?<!require|import)[\s]*[:=][\s]*["'][^"']{4,}["']/gi,
+  },
+  {
+    name: 'Suspicious String (looks like a secret)',
+    regex: /["'][A-Za-z0-9!@#$%^&*()_+={}\[\]:;'<>,.?/\\|-]{8,}["']/g,
+  },
+  {
+    name: 'Hardcoded Secrets in URLs or JSON',
+    regex: /(["']https?:\/\/.*[?&](?:token|key|auth|password|secret)[^"']*["'])|(["']\{.*(?:"(?:token|key|auth|password|secret)":\s*["'][^"']{4,}["']).*})/gi,
   }
 ];
 
@@ -15,6 +23,11 @@ function scanFiles(dir) {
 
   for (const file of files) {
     const filePath = path.join(dir, file);
+
+    // Skip node_modules and .git directories
+    if (filePath.includes('node_modules') || filePath.includes('.git')) {
+      continue;
+    }
 
     if (fs.statSync(filePath).isDirectory()) {
       scanFiles(filePath); // Recursively scan directories
