@@ -6,10 +6,6 @@ const patterns = [
   {
     name: 'Potential Password, Key, or Token',
     regex: /\b(?:(?:[a-z]*_)?(pass|password|passcode|pwd|secret|token|key|auth|access|random)[a-z0-9_]*)(?<!require|import)[\s]*[:=][\s]*["'][^"']{4,}["']/gi,
-  },
-  {
-    name: 'Suspicious String (looks like a secret)',
-    regex: /["'][A-Za-z0-9!@#$%^&*()_+={}\[\]:;'<>,.?/\\|-]{8,}["']/g,
   }
 ];
 
