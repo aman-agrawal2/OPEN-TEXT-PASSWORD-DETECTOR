@@ -1,3 +1,3 @@
-const passwordS = "my password"
-const passcode = "efnenfke" 
-const secret_api_ke : "fsefe" = "dfdf"
+const passwordS = "my passdword"
+const passcode = "efnendfke" 
+const secret_api_ke : "fsefe" = "dfddf"
