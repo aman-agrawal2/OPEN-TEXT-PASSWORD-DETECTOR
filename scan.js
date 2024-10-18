@@ -51,12 +51,18 @@ function scanFiles(files) {
 }
 
 // Get the list of changed files in the current commit
-let changedFiles;
+let changedFiles = [];
 try {
+  // Attempt to get changed files from the last commit
   changedFiles = execSync('git diff --name-only HEAD~1').toString().trim().split('\n');
 } catch (error) {
-  console.error('Error fetching changed files:', error);
-  process.exit(1);
+  // If that fails, check for modified files in the working directory
+  try {
+    changedFiles = execSync('git diff --name-only').toString().trim().split('\n');
+  } catch (diffError) {
+    console.error('Error fetching changed files:', diffError);
+    process.exit(1);
+  }
 }
 
 console.log('🔍 Scanning for potential secrets in changed files...');
