@@ -1,23 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// Define regex patterns to detect potential secrets
+// Define more generic regex patterns for detecting potential secrets
 const patterns = [
   {
-    name: 'AWS Access Key',
-    regex: /AKIA[0-9A-Z]{16}/g,
-  },
-  {
-    name: 'AWS Secret Key',
-    regex: /(?<![A-Za-z0-9])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])/g,
-  },
-  {
-    name: 'API Key',
-    regex: /(?:api[_-]?key|key|secret|token)[\s]*[:=][\s]*["']?[a-zA-Z0-9-_]{16,}["']?/gi,
-  },
-  {
-    name: 'Password',
-    regex: /(?:password|passwd|pwd)[\s]*[:=][\s]*["']?[a-zA-Z0-9!@#$%^&*()_+={}\[\]:;'<>,.?/\\|-]{8,}["']?/gi,
+    name: 'Potential Password, Key, or Token',
+    regex: /\b(?:(?:[a-z]*_)?(pass|password|passcode|pwd|secret|token|key|auth|access|random)[a-z0-9_]*)(?<!require|import)[\s]*[:=][\s]*["'][^"']{4,}["']/gi,
   }
 ];
 
